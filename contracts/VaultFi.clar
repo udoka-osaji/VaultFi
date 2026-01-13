@@ -119,3 +119,30 @@
     )
   )
 )
+
+;; Execute liquidation procedure
+(define-private (liquidate-position (loan-id uint))
+  (let (
+      (loan (unwrap! (map-get? loans { loan-id: loan-id }) ERR-LOAN-NOT-FOUND))
+      (borrower (get borrower loan))
+    )
+    (begin
+      (map-set loans { loan-id: loan-id } (merge loan { status: "liquidated" }))
+      (map-delete user-loans { user: borrower })
+      (ok true)
+    )
+  )
+)
+
+;; Validate loan ID range and existence
+(define-private (validate-loan-id (loan-id uint))
+  (and
+    (> loan-id u0)
+    (<= loan-id (var-get total-loans-issued))
+  )
+)
+
+;; Validate supported asset types
+(define-private (is-valid-asset (asset (string-ascii 3)))
+  (is-some (index-of VALID-ASSETS asset))
+)
