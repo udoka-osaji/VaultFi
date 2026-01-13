@@ -59,3 +59,31 @@
     status: (string-ascii 20),
   }
 )
+
+;; User loan tracking for portfolio management
+(define-map user-loans
+  { user: principal }
+  { active-loans: (list 10 uint) }
+)
+
+;; Dynamic price feed for collateral valuation
+(define-map collateral-prices
+  { asset: (string-ascii 3) }
+  { price: uint }
+)
+
+;; PRIVATE UTILITY FUNCTIONS
+
+;; Calculate collateral-to-loan ratio for risk assessment
+(define-private (calculate-collateral-ratio
+    (collateral uint)
+    (loan uint)
+    (btc-price uint)
+  )
+  (let (
+      (collateral-value (* collateral btc-price))
+      (ratio (* (/ collateral-value loan) u100))
+    )
+    ratio
+  )
+)
