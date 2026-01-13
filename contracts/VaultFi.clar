@@ -29,3 +29,33 @@
 
 ;; Supported collateral assets
 (define-constant VALID-ASSETS (list "BTC" "STX"))
+
+;; STATE VARIABLES
+
+;; Platform initialization status
+(define-data-var platform-initialized bool false)
+
+;; Risk management parameters
+(define-data-var minimum-collateral-ratio uint u150) ;; 150% minimum collateral ratio
+(define-data-var liquidation-threshold uint u120) ;; 120% liquidation trigger
+(define-data-var platform-fee-rate uint u1) ;; 1% platform fee
+
+;; Platform metrics
+(define-data-var total-btc-locked uint u0)
+(define-data-var total-loans-issued uint u0)
+
+;; DATA STRUCTURES
+
+;; Loan registry with comprehensive loan data
+(define-map loans
+  { loan-id: uint }
+  {
+    borrower: principal,
+    collateral-amount: uint,
+    loan-amount: uint,
+    interest-rate: uint,
+    start-height: uint,
+    last-interest-calc: uint,
+    status: (string-ascii 20),
+  }
+)
