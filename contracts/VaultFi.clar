@@ -311,3 +311,18 @@
 (define-read-only (get-user-loans (user principal))
   (map-get? user-loans { user: user })
 )
+
+;; Platform statistics and health metrics
+(define-read-only (get-platform-stats)
+  {
+    total-btc-locked: (var-get total-btc-locked),
+    total-loans-issued: (var-get total-loans-issued),
+    minimum-collateral-ratio: (var-get minimum-collateral-ratio),
+    liquidation-threshold: (var-get liquidation-threshold),
+  }
+)
+
+;; List of supported collateral assets
+(define-read-only (get-valid-assets)
+  VALID-ASSETS
+)
