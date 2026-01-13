@@ -264,3 +264,25 @@
     )
   )
 )
+
+;; GOVERNANCE & ADMINISTRATION
+
+;; Update minimum collateral ratio for risk management
+(define-public (update-collateral-ratio (new-ratio uint))
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+    (asserts! (>= new-ratio u110) ERR-INVALID-AMOUNT)
+    (var-set minimum-collateral-ratio new-ratio)
+    (ok true)
+  )
+)
+
+;; Adjust liquidation threshold for market conditions
+(define-public (update-liquidation-threshold (new-threshold uint))
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+    (asserts! (>= new-threshold u110) ERR-INVALID-AMOUNT)
+    (var-set liquidation-threshold new-threshold)
+    (ok true)
+  )
+)
