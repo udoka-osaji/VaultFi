@@ -286,3 +286,28 @@
     (ok true)
   )
 )
+
+;; Update oracle price feeds with validation
+(define-public (update-price-feed
+    (asset (string-ascii 3))
+    (new-price uint)
+  )
+  (begin
+    (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+    (asserts! (is-valid-asset asset) ERR-INVALID-ASSET)
+    (asserts! (is-valid-price new-price) ERR-INVALID-PRICE)
+    (ok (map-set collateral-prices { asset: asset } { price: new-price }))
+  )
+)
+
+;; READ-ONLY DATA ACCESS
+
+;; Retrieve detailed loan information
+(define-read-only (get-loan-details (loan-id uint))
+  (map-get? loans { loan-id: loan-id })
+)
+
+;; Get user's active loan portfolio
+(define-read-only (get-user-loans (user principal))
+  (map-get? user-loans { user: user })
+)
